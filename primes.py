@@ -1,6 +1,7 @@
 def primes(N):
     """Returns primes from 1 to N using sieve of Eratosthenes."""
-    """Asymptotic time complexity: N*log(log(N))"""
+    """Asymptotic time complexity, assuming there are N/log(N) primes smaller
+       than N: N*log(log(N))"""
     result = set(range(2, N+1))
     for i in range(2, N+1):
         if i not in result: continue
@@ -19,13 +20,18 @@ def is_prime(n, error):
     if n <= 0: raise ValueError("Argument is not a positive integer")
     if n == 1: return False
     if n == 2: return True
-    s = next(x for x in range(n) if (n-1) % (2**x) != 0) - 1
-    d = (n - 1) // (2**s)
+    s, d = 0, n - 1
+    while d % 2 == 0:
+        d //= 2
+        s += 1
+    assert(2**s * d == n-1 and d % 2 == 1)
     def could_be_prime():
         a = random.randint(1, n-1)
-        if (a**d) % n == 1: return True
+        x = (a**d) % n
+        if x == 1: return True
         for r in range(s):
-            if a**(d*2**r) % n == n-1: return True
+            if x == n-1: return True
+            x = x**2 % n
         return False
     # At least 3/4 of numbers are witnesses for compositeness of any n.
     for i in range(int(math.log(1/error, 4))+1):
