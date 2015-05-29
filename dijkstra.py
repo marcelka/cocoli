@@ -1,6 +1,18 @@
 import heapq
 
+def compute_neighs(vertices, weights):
+    result = {}
+    for v in vertices: result[v] = []
+    for edge, weight in weights.items():
+        result[edge[0]].append((edge[1], weight))
+    return result
+
 def shortest_paths(neighs, start):
+    """ Returs shortest paths from start to all reachable vertices."""
+    """ Input:
+            neighs: dict from vertex to iterable of 2-tuples (vertex, distance)
+            start:  the starting vertex
+    """
     visited = set()
     to_visit = [(0, start, None)]
     heapq.heapify(to_visit)
@@ -20,6 +32,7 @@ def shortest_paths(neighs, start):
 
 def shortest_path(neighs, start, stop):
     dists, prevs = shortest_paths(neighs, start)
+    if stop not in dists: return None, None
     def _path(v):
         if v == start: return [v]
         res = _path(prevs[v])
