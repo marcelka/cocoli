@@ -1,10 +1,13 @@
 import heapq
 
-def compute_neighs(vertices, weights):
+def compute_neighs(graph):
+    """ Returns dict with vertices mapped to 2-tuples (vertex, distance).
+        Input: graph: dict such that graph[v1][v2] = d if there is an edge from
+                      v1 to v2 with length v
+    """
     result = {}
-    for v in vertices: result[v] = []
-    for edge, weight in weights.items():
-        result[edge[0]].append((edge[1], weight))
+    for v in graph:
+        result[v] = [(w, graph[v][w]) for w in graph[v]]
     return result
 
 def shortest_paths(neighs, start):
