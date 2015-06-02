@@ -20,7 +20,7 @@ def shortest_distances(weights):
     Arguments:
     weights -- dict of dicts such that weights[v1][v2] = w iff there is an edge
                from v1 to v2 with weight w
-    Complexity: len(weights)**3
+    Complexity: (vertex count)**3
     """
     vertices = set(weights.keys())
     for v in weights:
