@@ -67,7 +67,8 @@ def path(start, end, next_moves):
         if path[-1] == end: return path
 
 def find_cycle(graph):
-    """Returns True iff the given directed graph has a cycle.
+    """
+    Returns True iff the given directed graph has a cycle.
 
     Arguments:
     graph -- dict such that graph[vertex] = dict/iterable of neighbors; if the
@@ -108,10 +109,9 @@ class TestFloydWarshall(unittest.TestCase):
         weights = dict((v, {}) for v in vertices)
         for edge in edges:
             weights[edge[0]][edge[1]] = random.randint(1, MAX_DIST)
-        neighs = dijkstra.compute_neighs(weights)
         fw_result = shortest_distances(weights)
         for v1, v2 in product(vertices, repeat=2):
-            dijkstra_result = dijkstra.shortest_path(neighs, v1, v2)[0]
+            dijkstra_result = dijkstra.shortest_path(weights, v1, v2)[0]
             self.assertEqual(fw_result[0][v1][v2], dijkstra_result)
 
     def test_cycle_detection(self):
