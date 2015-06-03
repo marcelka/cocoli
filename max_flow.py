@@ -31,7 +31,8 @@ def path(start, end, prevs):
 
 def max_flow(capacity, source, drain):
     """
-    Returns max flow and its value.
+    Returns max flow and its value. Flow is described by dict of dicts such that
+    flow[v1][v2] = f iff there is a flow from v1 to v2 of value f.
 
     Arguments:
     capacity -- dict of dicts such that capacity[v1][v2] is the flow capacity of

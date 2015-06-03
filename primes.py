@@ -1,7 +1,9 @@
 def primes(N):
-    """Returns primes from 1 to N using sieve of Eratosthenes."""
-    """Asymptotic time complexity, assuming there are N/log(N) primes smaller
-       than N: N*log(log(N))"""
+    """
+    Returns primes from 1 to N (inclusive) using sieve of Eratosthenes. Works in
+    asymptotic time complexity N*log(log(N)) (based on assumption that there are
+    N/log(N) primes smaller than N).
+    """
     result = set(range(2, N+1))
     for i in range(2, N+1):
         if i not in result: continue
@@ -16,7 +18,14 @@ import random
 import math
 
 def is_prime(n, error):
-    """Miller-Rabin primality test."""
+    """
+    Uses probabilistic Miller-Rabin primality test to determine whether n is
+    prime or composite.
+
+    Arguments:
+    n -- number to be tested
+    error -- maximum acceptable probability that the result will be wrong
+    """
     if n <= 0: raise ValueError("Argument is not a positive integer")
     if n == 1: return False
     if n == 2: return True
