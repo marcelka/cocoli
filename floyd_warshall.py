@@ -1,13 +1,5 @@
 from itertools import product
 
-def directed(undirected_weights):
-    result = dict((v, {}) for v in undirected_weights)
-    for v1 in undirected_weights:
-        for v2 in undirected_weights[v1]:
-            result[v2][v1] = undirected_weights[v1][v2]
-            result[v1][v2] = undirected_weights[v1][v2]
-    return result
-
 def shortest_distances(weights):
     """
     Returns shortest path values and next move along this path in a directed
@@ -84,8 +76,8 @@ def find_cycle(graph):
         if dists[v][v] < 0: return path(v, v, next_moves)
 
 
-from itertools import combinations
 import random
+from graph_utils import random_graph
 import unittest
 import dijkstra
 
@@ -101,16 +93,11 @@ class TestFloydWarshall(unittest.TestCase):
         self.assertEqual((dist[2][3], next_move[2][3]), (None, None))
 
     def test_by_comparison(self):
-        VERTEX_COUNT = 20
-        EDGE_COUNT = 100
-        MAX_DIST = 1000
-        vertices = list(range(VERTEX_COUNT))
-        edges = random.sample(list(combinations(vertices, 2)), EDGE_COUNT)
-        weights = dict((v, {}) for v in vertices)
-        for edge in edges:
-            weights[edge[0]][edge[1]] = random.randint(1, MAX_DIST)
+        weights = random_graph(value_generator=lambda: random.randint(1, 1000),
+                               vertex_count = 20,
+                               edge_count=100)
         fw_result = shortest_distances(weights)
-        for v1, v2 in product(vertices, repeat=2):
+        for v1, v2 in product(weights.keys(), repeat=2):
             dijkstra_result = dijkstra.shortest_path(weights, v1, v2)[0]
             self.assertEqual(fw_result[0][v1][v2], dijkstra_result)
 
