@@ -9,7 +9,7 @@ def _bin_search(condition, minv, maxv, fn):
         boundaries = sorted([avg, -fn(-minv, -maxv)])
     return _bin_search(condition, boundaries[0], boundaries[1], fn)
 
-def bin_search(condition, minv, maxv, fn, check=False):
+def bin_search(condition, minv, maxv, fn):
     """
     Returns min/max value that passes condition. Expects the value to be between
     minv and maxv.
