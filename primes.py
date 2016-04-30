@@ -17,16 +17,6 @@ def primes(N):
 import random
 import math
 
-def a_pow_b_mod_c(a, b, c):
-    coefs = list(reversed(list(int(i) for i in bin(b)[2:]))) # bin(5) is '0b101'
-    result = 1
-    last = a
-    for i in range(len(coefs)):
-        if coefs[i] == 1:
-            result = (result * last) % c
-        last = (last ** 2) % c
-    return result
-
 def is_prime(n, error):
     """
     Uses probabilistic Miller-Rabin primality test to determine whether n is
@@ -46,7 +36,7 @@ def is_prime(n, error):
     assert(2**s * d == n-1 and d % 2 == 1)
     def could_be_prime():
         a = random.randint(1, n-1)
-        x = a_pow_b_mod_c(a=a, b=d, c=n)
+        x = pow(a, d, n)
         if x == 1: return True
         for r in range(s):
             if x == n-1: return True
@@ -66,13 +56,6 @@ class TestPrimesLibrary(unittest.TestCase):
       eratosthenes = tuple(primes(1000))
       miller_rabin = tuple(p for p in range(2, 1000) if is_prime(p, 10**-10))
       self.assertEqual(eratosthenes, miller_rabin)
-
-  def test_pow_mod_helper(self):
-      for i in range(10):
-          a = random.randint(1, 10**5)
-          b = random.randint(1, 10**3)
-          c = random.randint(1, 10**5)
-          self.assertEqual(a_pow_b_mod_c(a, b, c), (a**b) % c)
 
 if __name__ == '__main__':
     unittest.main()
