@@ -31,10 +31,10 @@ import unittest
 class TestSearch(unittest.TestCase):
 
   def test_bin_search(self):
-      self.assertEqual(bin_search(lambda x: x < 10, 0, 100, max, True), 9)
-      self.assertEqual(bin_search(lambda x: x > 10, 0, 100, min, True), 11)
+      self.assertEqual(bin_search(lambda x: x < 10, 0, 100, max), 9)
+      self.assertEqual(bin_search(lambda x: x > 10, 0, 100, min), 11)
       with self.assertRaises(ValueError):
-          bin_search(lambda x: x > 10, 0, 5, min, True)
+          bin_search(lambda x: x > 10, 0, 5, min)
 
 if __name__ == '__main__':
     unittest.main()
