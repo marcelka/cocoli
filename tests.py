@@ -6,6 +6,7 @@ from search import TestSearch
 from sort import TestSortLibrary
 from spanning_tree import TestSpanningTree
 from union_find import TestUnionFind
+from interval_tree import TestIntervalTree
 import unittest
 
 
