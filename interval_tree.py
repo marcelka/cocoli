@@ -1,8 +1,8 @@
-def left_child(i, grandness=1):
-    return i * 2**grandness
+def left_child(i, depth=1):
+    return i * 2**depth
 
-def right_child(i, grandness=1):
-    return i * 2**grandness + 2**grandness - 1
+def right_child(i, depth=1):
+    return i * 2**depth + 2**depth - 1
 
 def parent(i):
     return i // 2
@@ -13,29 +13,30 @@ def _reduce(v1, v2, reducing_fn, neutral):
     return reducing_fn(v1, v2)
 
 # including a, including b
-def resolve_query(tree, reducing_fn, a, b, neutral=None):
+def resolve_query(tree, reducing_fn, a, b):
     values = []
     n = len(tree)
-    result = neutral
+    neutral = tree[0]
+    result = [neutral]
 
-    def update(i, k):
-        nonlocal result
+    def combine(i, k):
         start = left_child(i, k) - n // 2
         end = right_child(i, k) - n // 2
 
         if a <= start and b >= end:
-            result = _reduce(tree[i], result, reducing_fn, neutral)
+            result[0] = _reduce(tree[i], result[0], reducing_fn, neutral)
         elif (a >= start and a <= end) or (b >= start and b <= end):
-            update(2 * i, k - 1)
-            update(2 * i + 1, k - 1)
+            combine(2 * i, k - 1)
+            combine(2 * i + 1, k - 1)
 
     N = next(i for i in range(n) if 2**i == n) - 1
-    update(1, N)
-    return result
+    combine(1, N)
+    return result[0]
 
-def update(tree, reducing_fn, pos, val, neutral=None):
+def update(tree, reducing_fn, pos, val):
     p = pos + len(tree) // 2
     v = val
+    neutral = tree[0]
 
     while True:
         tree[p] = v
@@ -51,7 +52,7 @@ def build_tree(data, reducing_fn, neutral=None):
     tree = [neutral] * i * 2
 
     for i in range(n):
-        update(tree, reducing_fn, i, data[i], neutral)
+        update(tree, reducing_fn, i, data[i])
 
     return tree
 
@@ -78,10 +79,10 @@ class TestIntervalTree(unittest.TestCase):
       self.assertEqual(resolve_query(tree4, sum_two, 0, 1), 1)
       self.assertEqual(resolve_query(tree4, sum_two, 1, 2), 3)
 
-      tree6 = build_tree([0, 1, 2, 3, 4, 5], sum_two)
+      tree6 = build_tree([0, 1, 2, 3, 4, 5], sum_two, neutral=0)
       self.assertEqual(resolve_query(tree6, sum_two, 0, 5), 15)
       self.assertEqual(resolve_query(tree6, sum_two, 2, 4), 9)
-      self.assertEqual(resolve_query(tree6, sum_two, 2, 1, 0), 0)
+      self.assertEqual(resolve_query(tree6, sum_two, 2, 1), 0)
 
   def test_update(self):
       tree6 = build_tree([0, 1, 2, 3, 4, 5], sum_two)
